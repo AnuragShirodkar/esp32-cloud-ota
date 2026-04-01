@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-//  ESP32 Wireless OTA Cloud Firmware Updater
+//  ESP32 Wireless OTA Cloud Firmware Updater without security
 //  
 //  The ESP32 connects to your Wi-Fi, checks a Flask
 //  server for a newer firmware version, and flashes
