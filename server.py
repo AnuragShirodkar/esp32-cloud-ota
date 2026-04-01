@@ -150,8 +150,7 @@ def get_firmware():
         return jsonify({"error": "No firmware uploaded yet"}), 404
     return send_file(BIN_PATH, mimetype="application/octet-stream",
                      as_attachment=True, download_name="firmware.bin")
-    
-
+  
 # ── Browser Endpoints (login protected) ───────────
 
 @app.route("/upload", methods=["POST"])
