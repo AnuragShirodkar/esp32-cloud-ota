@@ -87,7 +87,7 @@ def register_device(req):
 
     devices  = load_devices()
     registry = load_registry()
-    now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+    now      = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     devices[mac] = {
         "mac":       mac,
@@ -652,9 +652,9 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       c.innerHTML = `<table class="device-table">
         <thead><tr><th>Device</th><th>Status</th><th>Firmware</th><th>Last seen</th><th></th></tr></thead>
         <tbody>${devices.map(d=>{
-          const lastSeen = new Date(d.last_seen + 'Z');
+          const lastSeen = new Date(d.last_seen);
           const diffMin  = Math.floor((new Date() - lastSeen) / 60000);
-          const isOnline = diffMin < 5;
+          const isOnline = diffMin < 2;
           const isUpToDate = d.version === serverVer;
           return `<tr>
             <td>
