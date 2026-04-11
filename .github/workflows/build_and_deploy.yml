@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Arduino CLI
         run: |
-        mkdir -p $HOME/arduino-cli-bin
+          mkdir -p $HOME/arduino-cli-bin
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=$HOME/arduino-cli-bin sh
           echo "$HOME/arduino-cli-bin" >> $GITHUB_PATH
 
@@ -34,8 +34,7 @@ jobs:
           arduino-cli core install esp32:esp32
 
       - name: Install required libraries
-        run: |
-          arduino-cli lib install "ArduinoJson"
+        run: arduino-cli lib install "ArduinoJson"
 
       - name: Update version in sketch
         run: |
@@ -43,18 +42,18 @@ jobs:
 
       - name: Compile sketch
         run: |
-          arduino-cli compile \
-            --fqbn esp32:esp32:esp32 \
-            --output-dir ./build \
-            esp32_firmware/esp32_ota_generic
+          arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./build esp32_firmware/esp32_ota_generic
 
       - name: Upload firmware to server
+        env:
+          OTA_SERVER_URL: ${{ secrets.OTA_SERVER_URL }}
+          OTA_API_KEY: ${{ secrets.OTA_API_KEY }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
         run: |
-          curl -X POST ${{ secrets.OTA_SERVER_URL }}/upload \
-            -H "X-Upload-Key: ${{ secrets.OTA_API_KEY }}" \
+          curl -X POST "$OTA_SERVER_URL/upload" \
+            -H "X-Upload-Key: $OTA_API_KEY" \
             -F "file=@./build/esp32_ota_generic.ino.bin" \
-            -F "version=${{ steps.version.outputs.VERSION }}"
+            -F "version=$VERSION"
 
       - name: Confirm deployment
-        run: |
-          echo "Firmware v${{ steps.version.outputs.VERSION }} deployed successfully"
+        run: echo "Firmware v${{ steps.version.outputs.VERSION }} deployed successfully"
