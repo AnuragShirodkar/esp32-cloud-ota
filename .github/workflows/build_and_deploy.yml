@@ -40,7 +40,7 @@ jobs:
         run: |
           sed -i 's/#define FW_VERSION.*"/#define FW_VERSION  "${{ steps.version.outputs.VERSION }}"/' esp32_firmware/esp32_ota_generic/esp32_ota_generic.ino
 
-      - - name: Compile sketch
+      - name: Compile sketch
         run: |
           arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./esp32_firmware/esp32_ota_generic/build esp32_firmware/esp32_ota_generic
       - name: Upload firmware to server
